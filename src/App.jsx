@@ -1,55 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
-
-function ListItem({ id, name, onDelete }) {
-  return (
-    <div>
-      {name}
-      <button onClick={() => onDelete(id)}>Delete</button>
-    </div>
-  );
-}
-function ListInput({ students, setStudents }) {
-  const [input, setInput] = useState("");
-  console.log(input);
-  const handleInputChange = (event) => {
-    setInput(event.target.value);
-  };
-
-  const handleAddButton = () => {
-    setStudents([
-      ...students,
-      {
-        id: crypto.randomUUID(),
-        name: input,
-      },
-    ]);
-    setInput("");
-    console.log(students);
-  };
-  return (
-    <>
-      <input value={input} onChange={handleInputChange} />
-      <button onClick={handleAddButton}>Add</button>
-    </>
-  );
-}
-function ListData({ students, setStudents }) {
-  const handleDelete = (id) => {
-    setStudents((prev) => prev.filter((name) => name.id !== id));
-  };
-  return students?.map((student) => (
-    <ListItem
-      key={student.id}
-      id={student.id}
-      onDelete={handleDelete}
-      name={student.name}
-    />
-  ));
-}
+import ListData from "./student-list Components/ListData";
+import ListInput from "./student-list Components/ListInput";
 
 function App() {
-  const [students, setStudents] = React.useState([
+  const [students, setStudents] = useState([
     { id: 1, name: "Bivin" },
     { id: 2, name: "Sheethal" },
     { id: 3, name: "Ashish" },
