@@ -1,4 +1,15 @@
-function ListItem({ student, handleDeleteButton }) {
+import { useContext } from "react";
+import AppContext from "../components/context/AppContext";
+
+function ListItem({ student }) {
+  console.log("List Item is running");
+
+  const { dispatch } = useContext(AppContext);
+
+  const handleDelete = (studentId) => {
+    dispatch({ type: "delete", payload: studentId });
+  };
+
   return (
     <div className="list-item">
       <div className="student-info">
@@ -6,10 +17,7 @@ function ListItem({ student, handleDeleteButton }) {
         <p className="student-contact">{student?.contact}</p>
       </div>
 
-      <button
-        className="delete-btn"
-        onClick={() => handleDeleteButton(student?.id)}
-      >
+      <button className="delete-btn" onClick={() => handleDelete(student?.id)}>
         Delete
       </button>
     </div>

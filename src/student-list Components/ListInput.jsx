@@ -1,44 +1,67 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useEffect, useState } from "react";
 import Input from "../components/Input";
+import { dummyContext } from "../App";
+import AppContext from "../components/context/AppContext";
 
-const ListInput = React.forwardRef(function ListInput(
-  { students, handleAddButton, searchValue, setSearchValue },
-  ref,
-) {
+function ListInput() {
+  console.log("List Input is running");
+  const { dispatch } = useContext(AppContext);
+
+  const { dummyValue } = useContext(dummyContext);
+  console.log(dummyValue);
   const [inputValue, setInputValue] = useState("");
   const [nameError, setNameError] = useState("");
   const [contactError, setContactError] = useState("");
 
+  const nameRef = useRef();
+  useEffect(() => {
+    if (nameRef.current) {
+      nameRef.current.focus();
+    }
+  }, []);
+
   const contactRef = useRef();
+
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
+    if (nameError) setNameError("");
   };
 
   const handleSearch = (event) => {
-    setSearchValue(event.target.value);
+    dispatch({ type: "search", payload: event.target.value });
   };
-  console.log(searchValue);
 
   const handleAddClick = () => {
-    const contact = contactRef.current.value;
-    if (inputValue === "") {
+    const contact = contactRef.current?.value ?? "";
+
+    if (!inputValue) {
       setNameError("Name is required");
     }
-    if (contact === "") {
+    if (!contact) {
       setContactError("Contact is required");
     }
-    if (inputValue && contact) {
-      const newStudent = {
-        name: inputValue,
-        id: crypto.randomUUID(),
-        contact,
-      };
 
-      handleAddButton(newStudent);
+    if (!inputValue || !contact) return;
 
+    if (contact && inputValue) {
+      dispatch({
+        type: "add",
+        payload: {
+          name: inputValue,
+          id: crypto.randomUUID(),
+          contact,
+        },
+      });
       setInputValue("");
       contactRef.current.value = "";
+      setContactError("");
+      setNameError("");
+      nameRef.current.focus();
     }
+
+    // setStudents((prev) => [...prev, newStudent]);
+
+    if (contactRef.current) contactRef.current.value = "";
   };
 
   return (
@@ -47,17 +70,17 @@ const ListInput = React.forwardRef(function ListInput(
         <div className="list-input">
           <Input
             type="text"
-            name={"name"}
+            name="name"
             value={inputValue}
-            ref={ref}
+            ref={nameRef}
             onChange={handleInputChange}
             placeholder="Enter the name..."
             error={nameError}
-            className={"input-box"}
+            className="input-box"
           />
           <Input
             type="tel"
-            name={"contact"}
+            name="contact"
             ref={contactRef}
             placeholder="Contacts..."
             error={contactError}
@@ -69,8 +92,8 @@ const ListInput = React.forwardRef(function ListInput(
         <div className="list-search">
           <Input
             type="text"
-            name={"search"}
-            value={searchValue}
+            name="search"
+            // value={searchValue}
             onChange={handleSearch}
             placeholder="Search..."
           />
@@ -78,6 +101,6 @@ const ListInput = React.forwardRef(function ListInput(
       </div>
     </div>
   );
-});
+}
 
 export default ListInput;

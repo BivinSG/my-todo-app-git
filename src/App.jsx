@@ -1,51 +1,25 @@
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext } from "react";
 import "./App.css";
 import ListData from "./student-list Components/ListData";
 import ListInput from "./student-list Components/ListInput";
 
+export const dummyContext = createContext();
+
 function App() {
-  const [students, setStudents] = useState([
-    { id: 1, name: "Bivin", contact: 9400030603 },
-    { id: 2, name: "Sheethal", contact: 9400075849 },
-  ]);
-  const [searchValue, setSearchValue] = useState("");
-
-  const nameRef = useRef();
-
-  useEffect(() => {
-    if (nameRef.current) {
-      nameRef.current.focus();
-    }
-  }, []);
-
-  const handleAddButton = (newStudent) => {
-    setStudents([...students, newStudent]);
-  };
-
-  const handleDeleteButton = (studentId) => {
-    const filteredArray = students.filter(
-      (student) => student.id !== studentId,
-    );
-    setStudents(filteredArray);
-  };
+  console.log("App is running");
 
   return (
-    <>
-      <ListInput
-        students={students}
-        ref={nameRef}
-        handleAddButton={handleAddButton}
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-      />
+    <dummyContext.Provider value={{ dummyValue: "Hello Bivin" }}>
+      <div className="app-container">
+        <div className="list-input-container">
+          <ListInput />
+        </div>
 
-      <ListData
-        students={students.filter((student) =>
-          student.name.toLowerCase().includes(searchValue.toLowerCase()),
-        )}
-        handleDeleteButton={handleDeleteButton}
-      />
-    </>
+        <div className="contacts">
+          <ListData />
+        </div>
+      </div>
+    </dummyContext.Provider>
   );
 }
 
