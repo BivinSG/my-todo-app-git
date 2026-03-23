@@ -1,11 +1,15 @@
-import {
-  useCallback,
-  useEffect,
+import React, {
+  useContext,
   useRef,
-  useState
+  useEffect,
+  useState,
+  useCallback,
+  forwardRef,
 } from "react";
-import useAppContext from "../components/hooks/useAppContext";
 import Input from "../components/Input";
+import { dummyContext } from "../App";
+import AppContext from "../components/context/AppContext";
+import useAppContext from "../components/hooks/useAppContext";
 
 function ListInput() {
   // console.log("List Input is running");
@@ -16,6 +20,9 @@ function ListInput() {
   const [inputValue, setInputValue] = useState("");
   const [nameError, setNameError] = useState("");
   const [contactError, setContactError] = useState("");
+  const [contactInput, setContactInput] = useState("");
+  const [formValues, setFormValues] = useState({ name: "", contact: "" });
+  const [formErrors, setFormErrors] = useState({});
 
   const nameRef = useRef();
   useEffect(() => {
@@ -26,46 +33,49 @@ function ListInput() {
 
   const contactRef = useRef();
 
-  const handleInputChange = useCallback((event) => {
-    setInputValue(event.target.value);
-    if (nameError) setNameError("");
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+    setFormErrors((prev) => ({
+      ...prev,
+      [name]: value ? "" : `${name} is required`,
+    }));
+    // if (name === "name") {
+    //   setInputValue(value);
+    // } else if (name === "contact") {
+    //   setContactInput(value);
+    // }
   }, []);
+  console.log(formValues);
+
+  function validateFormValues() {
+    const errors = {};
+    console.log(Object.keys(formValues));
+
+    Object.keys(formValues).forEach((key) => {
+      if (!formValues[key]) {
+        errors[key] = `${key} is required`;
+      }
+    });
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
 
   const handleSearch = useCallback((event) => {
     dispatch({ type: "search", payload: event.target.value });
   }, []);
 
   const handleAddClick = useCallback(() => {
-    const contact = contactRef.current?.value ?? "";
-
-    if (!inputValue) {
-      setNameError("Name is required");
-    }
-    if (!contact) {
-      setContactError("Contact is required");
-    }
-
-    if (!inputValue || !contact) return;
-
-    if (contact && inputValue) {
+    // console.log(Object.keys(formValues));
+    if (validateFormValues()) {
       dispatch({
         type: "add",
-        payload: {
-          name: inputValue,
-          id: crypto.randomUUID(),
-          contact,
-        },
+        payload: { ...formValues, id: crypto.randomUUID() },
       });
-      setInputValue("");
-      contactRef.current.value = "";
-      setContactError("");
-      setNameError("");
+      setFormValues({});
+      setFormErrors({});
       nameRef.current.focus();
     }
-
-    // setStudents((prev) => [...prev, newStudent]);
-
-    if (contactRef.current) contactRef.current.value = "";
   });
 
   return (
@@ -75,19 +85,20 @@ function ListInput() {
           <Input
             type="text"
             name="name"
-            value={inputValue}
+            value={formValues?.name || ""}
             ref={nameRef}
             onChange={handleInputChange}
             placeholder="Enter the name..."
-            error={nameError}
+            error={formErrors?.name}
             className="input-box"
           />
           <Input
             type="tel"
             name="contact"
-            ref={contactRef}
+            value={formValues?.contact || ""}
+            onChange={handleInputChange}
             placeholder="Contacts..."
-            error={contactError}
+            error={formErrors?.contact}
           />
         </div>
 

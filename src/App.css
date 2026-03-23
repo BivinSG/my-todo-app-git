@@ -145,3 +145,6 @@ input + div {
   font-size: 0.8rem;
   margin-top: 4px;
 }
+.name-error{
+  color: red;
+}
