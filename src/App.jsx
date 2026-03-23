@@ -6,7 +6,7 @@ import ListInput from "./student-list Components/ListInput";
 export const dummyContext = createContext();
 
 function App() {
-  console.log("App is running");
+  // console.log("App is running");
 
   return (
     <dummyContext.Provider value={{ dummyValue: "Hello Bivin" }}>

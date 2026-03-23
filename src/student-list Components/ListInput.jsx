@@ -1,14 +1,18 @@
-import React, { useContext, useRef, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
+import useAppContext from "../components/hooks/useAppContext";
 import Input from "../components/Input";
-import { dummyContext } from "../App";
-import AppContext from "../components/context/AppContext";
 
 function ListInput() {
-  console.log("List Input is running");
-  const { dispatch } = useContext(AppContext);
+  // console.log("List Input is running");
+  const { state, dispatch } = useAppContext();
 
-  const { dummyValue } = useContext(dummyContext);
-  console.log(dummyValue);
+  // const { dummyValue } = useContext(dummyContext);
+  // console.log(dummyValue);
   const [inputValue, setInputValue] = useState("");
   const [nameError, setNameError] = useState("");
   const [contactError, setContactError] = useState("");
@@ -22,16 +26,16 @@ function ListInput() {
 
   const contactRef = useRef();
 
-  const handleInputChange = (event) => {
+  const handleInputChange = useCallback((event) => {
     setInputValue(event.target.value);
     if (nameError) setNameError("");
-  };
+  }, []);
 
-  const handleSearch = (event) => {
+  const handleSearch = useCallback((event) => {
     dispatch({ type: "search", payload: event.target.value });
-  };
+  }, []);
 
-  const handleAddClick = () => {
+  const handleAddClick = useCallback(() => {
     const contact = contactRef.current?.value ?? "";
 
     if (!inputValue) {
@@ -62,7 +66,7 @@ function ListInput() {
     // setStudents((prev) => [...prev, newStudent]);
 
     if (contactRef.current) contactRef.current.value = "";
-  };
+  });
 
   return (
     <div className="list-input-section">
@@ -93,7 +97,7 @@ function ListInput() {
           <Input
             type="text"
             name="search"
-            // value={searchValue}
+            value={state?.search}
             onChange={handleSearch}
             placeholder="Search..."
           />

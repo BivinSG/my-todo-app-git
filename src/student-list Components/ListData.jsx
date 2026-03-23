@@ -1,10 +1,9 @@
-import { useContext, useMemo, useState } from "react";
-import AppContext from "../components/context/AppContext";
+import useAppContext from "../components/hooks/useAppContext";
 import ListItem from "./ListItem";
 
 function ListData() {
-  console.log("List Data is running");
-  const { state } = useContext(AppContext);
+  // console.log("List Data is running");
+  const { state } = useAppContext();
 
   return state?.students?.length > 0 ? (
     state?.students

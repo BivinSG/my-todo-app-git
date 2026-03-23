@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import AppContext from "../components/context/AppContext";
+import useAppContext from "../components/hooks/useAppContext";
 
 function ListItem({ student }) {
-  console.log("List Item is running");
+  // console.log("List Item is running");
 
-  const { dispatch } = useContext(AppContext);
+  const { dispatch } = useAppContext();
 
   const handleDelete = (studentId) => {
     dispatch({ type: "delete", payload: studentId });
