@@ -1,8 +1,6 @@
-import { createContext, useContext } from "react";
 import "./App.css";
 import ListData from "./student-list Components/ListData";
 import ListInput from "./student-list Components/ListInput";
-import Modal from "./components/Modal";
 
 function App() {
   return (
@@ -21,3 +19,11 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
