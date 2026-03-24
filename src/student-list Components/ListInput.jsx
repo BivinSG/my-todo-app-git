@@ -1,28 +1,17 @@
-import React, {
-  useContext,
-  useRef,
-  useEffect,
-  useState,
-  useCallback,
-  forwardRef,
-} from "react";
-import Input from "../components/Input";
-import { dummyContext } from "../App";
-import AppContext from "../components/context/AppContext";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useAppContext from "../components/hooks/useAppContext";
+import Input from "../components/Input";
+import Modal from "../components/Modal";
 
 function ListInput() {
-  // console.log("List Input is running");
   const { state, dispatch } = useAppContext();
-
-  // const { dummyValue } = useContext(dummyContext);
-  // console.log(dummyValue);
   const [inputValue, setInputValue] = useState("");
   const [nameError, setNameError] = useState("");
   const [contactError, setContactError] = useState("");
   const [contactInput, setContactInput] = useState("");
   const [formValues, setFormValues] = useState({ name: "", contact: "" });
   const [formErrors, setFormErrors] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
 
   const nameRef = useRef();
   useEffect(() => {
@@ -66,55 +55,69 @@ function ListInput() {
   }, []);
 
   const handleAddClick = useCallback(() => {
+    setModalOpen(!modalOpen);
     // console.log(Object.keys(formValues));
-    if (validateFormValues()) {
-      dispatch({
-        type: "add",
-        payload: { ...formValues, id: crypto.randomUUID() },
-      });
-      setFormValues({});
-      setFormErrors({});
-      nameRef.current.focus();
-    }
+    // if (validateFormValues()) {  
+    //   dispatch({
+    //     type: "add",
+    //     payload: { ...formValues, id: crypto.randomUUID() },
+    //   });
+    //   setFormValues({});
+    //   setFormErrors({});
+    //   nameRef.current.focus();
+    // }
   });
 
+  const handleClose = () => {
+    console.log("hello");
+    setModalOpen(!modalOpen);
+  };
+
   return (
-    <div className="list-input-section">
-      <div className="list-input-container">
-        <div className="list-input">
-          <Input
-            type="text"
-            name="name"
-            value={formValues?.name || ""}
-            ref={nameRef}
-            onChange={handleInputChange}
-            placeholder="Enter the name..."
-            error={formErrors?.name}
-            className="input-box"
-          />
-          <Input
-            type="tel"
-            name="contact"
-            value={formValues?.contact || ""}
-            onChange={handleInputChange}
-            placeholder="Contacts..."
-            error={formErrors?.contact}
-          />
-        </div>
+    <>
+      {modalOpen ? (
+        <Modal handleClose={handleClose} />
+      ) : (
+        <>
+          <div className="list-input-section">
+            <div className="list-input-container">
+              <div className="list-input">
+                <Input
+                  type="text"
+                  name="name"
+                  value={formValues?.name || ""}
+                  ref={nameRef}
+                  onChange={handleInputChange}
+                  placeholder="Enter the name..."
+                  error={formErrors?.name}
+                  className="input-box"
+                />
+                <Input
+                  type="tel"
+                  name="contact"
+                  value={formValues?.contact || ""}
+                  onChange={handleInputChange}
+                  placeholder="Contacts..."
+                  error={formErrors?.contact}
+                />
+              </div>
 
-        <button onClick={handleAddClick}>Add</button>
+              <button onClick={handleAddClick}>Add</button>
 
-        <div className="list-search">
-          <Input
-            type="text"
-            name="search"
-            value={state?.search}
-            onChange={handleSearch}
-            placeholder="Search..."
-          />
-        </div>
-      </div>
-    </div>
+              <div className="list-search">
+                <Input
+                  type="text"
+                  name="search"
+                  value={state?.search}
+                  onChange={handleSearch}
+                  placeholder="Search..."
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 }
 
