@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import useAppContext from "../components/hooks/useAppContext";
 import Input from "../components/Input";
 import Modal from "../components/Modal";
+import RadioButton from "../components/RadioButton";
+import CheckBox from "../components/CheckBox";
 
 function ListInput() {
   const { state, dispatch } = useAppContext();
@@ -9,7 +11,12 @@ function ListInput() {
   const [nameError, setNameError] = useState("");
   const [contactError, setContactError] = useState("");
   const [contactInput, setContactInput] = useState("");
-  const [formValues, setFormValues] = useState({ name: "", contact: "" });
+  const [formValues, setFormValues] = useState({
+    name: "",
+    contact: "",
+    education: "",
+    skills: [],
+  });
   const [formErrors, setFormErrors] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -23,18 +30,26 @@ function ListInput() {
   const contactRef = useRef();
 
   const handleInputChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setFormValues((prev) => ({ ...prev, [name]: value }));
-    setFormErrors((prev) => ({
-      ...prev,
-      [name]: value ? "" : `${name} is required`,
-    }));
-    // if (name === "name") {
-    //   setInputValue(value);
-    // } else if (name === "contact") {
-    //   setContactInput(value);
-    // }
-  }, []);
+    const { name, value, type, checked } = e.target;
+    console.log(name, value, type, checked);
+    console.log(type);
+    if (type === "checkbox") {
+      if (checked) {
+        setFormValues((prev) => ({
+          ...prev,
+          [name]: [...prev[name], value],
+        }));
+      } else {
+        setFormValues((prev) => ({
+          ...prev,
+          [name]: prev[name].filter((val) => val !== value),
+        }));
+      }
+    } else {
+      setFormValues((prev) => ({ ...prev, [name]: value }));
+    }
+  },[]);
+
   console.log(formValues);
 
   function validateFormValues() {
@@ -54,18 +69,25 @@ function ListInput() {
     dispatch({ type: "search", payload: event.target.value });
   }, []);
 
-  const handleAddClick = useCallback(() => {
+  const toggleModal = () => {
     setModalOpen(!modalOpen);
-    // console.log(Object.keys(formValues));
-    // if (validateFormValues()) {  
-    //   dispatch({
-    //     type: "add",
-    //     payload: { ...formValues, id: crypto.randomUUID() },
-    //   });
-    //   setFormValues({});
-    //   setFormErrors({});
-    //   nameRef.current.focus();
-    // }
+  };
+
+  const resetStates = () => {
+    setFormErrors({});
+    setFormValues({ name: "", contact: "" });
+    toggleModal();
+  };
+
+  const handleSave = useCallback(() => {
+    if (validateFormValues()) {
+      dispatch({
+        type: "add",
+        payload: { ...formValues, id: crypto.randomUUID() },
+      });
+      resetStates();
+      nameRef.current.focus();
+    }
   });
 
   const handleClose = () => {
@@ -76,46 +98,73 @@ function ListInput() {
   return (
     <>
       {modalOpen ? (
-        <Modal handleClose={handleClose} />
-      ) : (
-        <>
-          <div className="list-input-section">
-            <div className="list-input-container">
-              <div className="list-input">
-                <Input
-                  type="text"
-                  name="name"
-                  value={formValues?.name || ""}
-                  ref={nameRef}
-                  onChange={handleInputChange}
-                  placeholder="Enter the name..."
-                  error={formErrors?.name}
-                  className="input-box"
-                />
-                <Input
-                  type="tel"
-                  name="contact"
-                  value={formValues?.contact || ""}
-                  onChange={handleInputChange}
-                  placeholder="Contacts..."
-                  error={formErrors?.contact}
+        <Modal
+          modalOpen={modalOpen}
+          setModalOpen={toggleModal}
+          handleClose={handleClose}
+          modalTitle={"Manage Student"}
+          modalBody={
+            <div className="list-input">
+              <Input
+                type="text"
+                name="name"
+                value={formValues?.name || ""}
+                ref={nameRef}
+                onChange={handleInputChange}
+                placeholder="Enter the name..."
+                error={formErrors?.name}
+                className="input-box"
+              />
+              <Input
+                type="tel"
+                name="contact"
+                value={formValues?.contact || ""}
+                onChange={handleInputChange}
+                placeholder="Contacts..."
+                error={formErrors?.contact}
+              />
+              <div>
+                <RadioButton
+                  label={"Education"}
+                  name="education"
+                  options={[
+                    { label: "non-tech", value: "non-tech" },
+                    { label: "tech", value: "tech" },
+                  ]}
+                  handleInputChange={handleInputChange}
                 />
               </div>
-
-              <button onClick={handleAddClick}>Add</button>
-
-              <div className="list-search">
-                <Input
-                  type="text"
-                  name="search"
-                  value={state?.search}
-                  onChange={handleSearch}
-                  placeholder="Search..."
+              <div>
+                <CheckBox
+                  name={"skills"}
+                  label={"skills familiar with"}
+                  handleInputChange={handleInputChange}
+                  options={[
+                    { label: "HTML", value: "HTML" },
+                    { label: "CSS", value: "CSS" },
+                    { label: "JAVASCRIPT", value: "JAVASCRIPT" },
+                  ]}
                 />
               </div>
             </div>
+          }
+          handleSave={handleSave}
+        />
+      ) : (
+        <div className="list-input-section">
+          <div className="list-input-container">
+            <button onClick={toggleModal}>Add</button>
+            <div className="list-search">
+              <Input
+                type="text"
+                name="search"
+                value={state?.search}
+                onChange={handleSearch}
+                placeholder="Search..."
+              />
+            </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );
