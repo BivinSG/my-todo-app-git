@@ -13,12 +13,12 @@ const Modal = ({
     <div className={styles.modal}>
       <div className={styles["modal-content"]}>
         <div className={styles["model-header"]}>
-          <div className={styles["model-title"]}>Model Title</div>
+          <div className={styles["model-title"]}>{modalTitle}</div>
         </div>
         <div className={styles["model-body"]}>{modalBody}</div>
         <div className={styles["model-footer"]}>
           <button className="btn btn-primary" onClick={handleSave}>
-            Save
+            Save  
           </button>
           <button className={styles["close-btn"]} onClick={handleClose}>
             Close
