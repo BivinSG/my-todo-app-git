@@ -7,13 +7,19 @@ const Dropdown = ({
   Dropdown,
   options,
   handleInputChange,
+  selectedValue,
 }) => {
   return (
     <div>
       <div>
         <label htmlFor={name}>{name}</label>
       </div>
-      <select name={name} id={name} onChange={handleInputChange}>
+      <select
+        name={name}
+        id={name}
+        onChange={handleInputChange}
+        value={selectedValue}
+      >
         <option value="">Select Your Course</option>
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>

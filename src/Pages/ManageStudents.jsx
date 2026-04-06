@@ -162,6 +162,7 @@ const ManageStudents = function ListInput() {
                 <RadioButton
                   label={"Education"}
                   name="education"
+                  selectedValue={formValues?.education || ""}
                   options={[
                     { label: "non-tech", value: "non-tech" },
                     { label: "tech", value: "tech" },
@@ -174,6 +175,7 @@ const ManageStudents = function ListInput() {
                   name={"skills"}
                   label={"skills familiar with"}
                   handleInputChange={handleInputChange}
+                  selectedValues={formValues?.skills || []}
                   options={[
                     { label: "HTML", value: "HTML" },
                     { label: "CSS", value: "CSS" },
@@ -186,6 +188,7 @@ const ManageStudents = function ListInput() {
                   label={"Course"}
                   name={"course"}
                   handleInputChange={handleInputChange}
+                  selectedValue={formValues?.course || ""}
                   options={[
                     { label: "Mern", value: "Mern" },
                     { label: "React", value: "React" },

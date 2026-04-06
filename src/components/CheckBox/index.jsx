@@ -1,6 +1,6 @@
 import React from "react";
 
-const CheckBox = ({ options, name, handleInputChange }) => {
+const CheckBox = ({ options, name, handleInputChange, selectedValues }) => {
   return (
     <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
       {options.map((opt) => (
@@ -8,15 +8,16 @@ const CheckBox = ({ options, name, handleInputChange }) => {
           key={opt.value}
           style={{ display: "flex", gap: "10px", alignItems: "center" }}
         >
-          <div>{opt.label}</div>
           <div>
             <input
               type="checkbox"
               name={name}
               value={opt.value}
               onChange={handleInputChange}
+              checked={selectedValues?.includes(opt.value)}
             />
           </div>
+          <div>{opt.label}</div>
         </div>
       ))}
     </div>

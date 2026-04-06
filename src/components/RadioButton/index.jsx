@@ -1,6 +1,13 @@
 import React from "react";
 
-const RadioButton = ({ label, name, type, options, handleInputChange }) => {
+const RadioButton = ({
+  label,
+  name,
+  type,
+  options,
+  handleInputChange,
+  selectedValue,
+}) => {
   return (
     <>
       <div>
@@ -18,6 +25,7 @@ const RadioButton = ({ label, name, type, options, handleInputChange }) => {
                 id={opt.value}
                 name={name}
                 value={opt.value}
+                checked={selectedValue === opt.value}
                 type="radio"
                 onChange={handleInputChange}
               />
