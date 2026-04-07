@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../Input";
 
 const Table = ({ tableColumns, data, toggleModal }) => {
+  const [search, setSearch] = useState("");
+
+  const [filteredData, setFilteredData] = useState([]);
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  useEffect(() => {
+    const ftData = data.filter((row) =>
+      tableColumns.some((col) => {
+        const value = row[col.accessor];
+        return (
+          value && value.toString().toLowerCase().includes(search.toLowerCase())
+        );
+      }),
+    );
+    setFilteredData(ftData);
+  }, [data, search, tableColumns]);
+
   return (
     <>
       <div className="list-input-container">
@@ -13,7 +33,7 @@ const Table = ({ tableColumns, data, toggleModal }) => {
             type="text"
             name="search"
             // value={state?.search}
-            // onChange={handleSearch}
+            onChange={handleSearch}
             placeholder="Search..."
           />
         </div>
@@ -27,15 +47,21 @@ const Table = ({ tableColumns, data, toggleModal }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.map((student, index) => (
-            <tr key={index}>
-              {tableColumns.map((col, index) => (
-                <td key={index}>
-                  {col?.render ? col?.render(student) : student[col.accessor]}
-                </td>
-              ))}
+          {filteredData.length > 0 ? (
+            filteredData.map((student, index) => (
+              <tr key={index}>
+                {tableColumns.map((col, index) => (
+                  <td key={index}>
+                    {col?.render ? col?.render(student) : student[col.accessor]}
+                  </td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={tableColumns.length}>No data found</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </>
