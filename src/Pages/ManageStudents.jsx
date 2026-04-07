@@ -58,8 +58,6 @@ const ManageStudents = function ListInput() {
     }
   }, []);
 
-  console.log(formValues);
-
   function validateFormValues() {
     const errors = {};
     console.log(Object.keys(formValues));
@@ -79,6 +77,14 @@ const ManageStudents = function ListInput() {
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
+    setFormValues({
+      name: "",
+      contact: "",
+      education: "",
+      skills: [],
+      course: "",
+    });
+    setFormErrors({});
   };
 
   const resetStates = () => {
@@ -89,19 +95,27 @@ const ManageStudents = function ListInput() {
 
   const handleSave = useCallback(() => {
     if (validateFormValues()) {
-      const newStudents = dispatch({
-        type: "add",
-        payload: { ...formValues, id: crypto.randomUUID() },
-      });
-      setData([...data, newStudents]);
+      if (formValues?.id) {
+        dispatch({ type: "edit", payload: formValues });
+      } else {
+        const newStudent = { ...formValues, id: crypto.randomUUID() };
+        dispatch({ type: "add", payload: newStudent });
+      }
       resetStates();
-      nameRef.current.focus();
     }
   });
 
   const handleClose = () => {
-    console.log("hello");
     setModalOpen(!modalOpen);
+  };
+
+  const handleEdit = (studentId) => {
+    setModalOpen(true);
+    const updateStudent = students.find((std) => std?.id === studentId);
+    setFormValues(updateStudent);
+  };
+  const handleDelete = (studentId) => {
+    dispatch({ type: "delete", payload: studentId });
   };
 
   const tableColumns = [
@@ -111,6 +125,31 @@ const ManageStudents = function ListInput() {
     { header: "Education", accessor: "education" },
     { header: "Skills", accessor: "skills" },
     { header: "Course", accessor: "course" },
+    {
+      header: "Actions",
+      render: (student) => {
+        return (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button
+              className="btn btn-sm btn-warning"
+              onClick={() => {
+                handleEdit(student?.id);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className="btn btn-sm btn-danger"
+              onClick={() => {
+                handleDelete(student?.id);
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        );
+      },
+    },
   ];
 
   useEffect(() => {

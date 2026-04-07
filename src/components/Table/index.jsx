@@ -1,7 +1,7 @@
 import React from "react";
 import Input from "../../Input";
 
-const Table = ({ tableColumns, data,toggleModal }) => {
+const Table = ({ tableColumns, data, toggleModal }) => {
   return (
     <>
       <div className="list-input-container">
@@ -21,8 +21,8 @@ const Table = ({ tableColumns, data,toggleModal }) => {
       <table className="table">
         <thead>
           <tr>
-            {tableColumns.map((col) => (
-              <th key={col.accessor}>{col.header}</th>
+            {tableColumns?.map((col, index) => (
+              <th key={index}>{col.header}</th>
             ))}
           </tr>
         </thead>
@@ -30,7 +30,9 @@ const Table = ({ tableColumns, data,toggleModal }) => {
           {data?.map((student, index) => (
             <tr key={index}>
               {tableColumns.map((col, index) => (
-                <td key={index}>{student[col.accessor]}</td>
+                <td key={index}>
+                  {col?.render ? col?.render(student) : student[col.accessor]}
+                </td>
               ))}
             </tr>
           ))}
