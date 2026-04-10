@@ -9,17 +9,23 @@ const Modal = ({
   handleSave,
   handleClose,
 }) => {
+  // Hide modal when closed
+  if (!modalOpen) return null;
+
   return (
     <div className={styles.modal}>
       <div className={styles["modal-content"]}>
-        <div className={styles["model-header"]}>
-          <div className={styles["model-title"]}>{modalTitle}</div>
+        <div className={styles["modal-header"]}>
+          <div className={styles["modal-title"]}>{modalTitle}</div>
         </div>
-        <div className={styles["model-body"]}>{modalBody}</div>
-        <div className={styles["model-footer"]}>
+
+        <div className={styles["modal-body"]}>{modalBody}</div>
+
+        <div className={styles["modal-footer"]}>
           <button className="btn btn-primary" onClick={handleSave}>
-            Save  
+            Save
           </button>
+
           <button className={styles["close-btn"]} onClick={handleClose}>
             Close
           </button>

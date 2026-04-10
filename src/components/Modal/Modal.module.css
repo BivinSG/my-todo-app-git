@@ -16,11 +16,11 @@
   display: flex;
   flex-direction: column;
 }
-.model-body {
+.modal-body {
   flex: 3;
   padding: 10px;
 }
-.model-header {
+.modal-header {
   /* position: relative; */
   display: flex;
   justify-content: center;
@@ -32,7 +32,7 @@
   padding: 10px;
   color: white;
 }
-.model-footer {
+.modal-footer {
   padding: 10px;
 
   display: flex;
