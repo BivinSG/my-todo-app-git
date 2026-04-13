@@ -10,11 +10,13 @@ import Home from "./Pages/Home";
 import ManageStudents from "./Pages/ManageStudents";
 import ManageCourses from "./Pages/ManageCourses";
 import Layout from "./components/Layout";
+import RouteError from "./Pages/RouteError";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <Home /> },
       { path: "/home", element: <Home /> },
