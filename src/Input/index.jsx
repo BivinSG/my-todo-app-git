@@ -2,10 +2,13 @@ import React, { forwardRef } from "react";
 
 const Input = React.memo(
   forwardRef((props, ref) => {
-
     return (
       <>
         <div>
+          <label htmlFor={props.name}>{props.label}</label>
+          <span style={{ color: "red" }}>*</span>
+        </div>
+        <div style={{ marginBottom: "20px" }}>
           <input
             name={props.name}
             ref={ref}

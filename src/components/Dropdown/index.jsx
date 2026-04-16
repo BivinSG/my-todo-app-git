@@ -12,7 +12,7 @@ const Dropdown = ({
   return (
     <div>
       <div>
-        <label htmlFor={name}>{name}</label>
+        <label htmlFor={name}>{label}</label>
       </div>
       <select
         name={name}

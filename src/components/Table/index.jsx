@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../Input";
 
-const Table = ({ tableColumns, data, toggleModal }) => {
+const Table = ({ tableColumns, data, onAddClick }) => {
   const [search, setSearch] = useState("");
 
   const [filteredData, setFilteredData] = useState([]);
@@ -25,17 +25,18 @@ const Table = ({ tableColumns, data, toggleModal }) => {
   return (
     <>
       <div className="list-input-container">
-        <button onClick={toggleModal}>
+        <button onClick={onAddClick}>
           <i className="fa-solid fa-plus add-icon"></i>
         </button>
         <div className="list-search">
-          <Input
+          {/* <Input
             type="text"
             name="search"
             // value={state?.search}
             onChange={handleSearch}
             placeholder="Search..."
-          />
+          /> */}
+          <input type="text" placeholder="Search Here..." />
         </div>
       </div>
       <table className="table">

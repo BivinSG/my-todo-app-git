@@ -18,7 +18,7 @@ const RadioButton = ({
         {options.map((opt) => (
           <div
             key={opt.value}
-            style={{ display: "flex", gap: "10px", alignItems: "center" }}
+            style={{ display: "flex", gap: "10px", alignItems: "center",marginBottom: "10px" }}
           >
             <div>
               <input

@@ -11,6 +11,7 @@ import ManageStudents from "./Pages/ManageStudents";
 import ManageCourses from "./Pages/ManageCourses";
 import Layout from "./components/Layout";
 import RouteError from "./Pages/RouteError";
+import Add_Update_Students from "./Pages/Add_Update_Students";
 
 const router = createBrowserRouter([
   {
@@ -19,10 +20,17 @@ const router = createBrowserRouter([
     errorElement: <RouteError />,
     children: [
       { index: true, element: <Home /> },
-      { path: "/home", element: <Home /> },
-      { path: "/students", element: <ManageStudents /> },
+      {
+        path: "/home",
+        element: <Home />,
+      },
+      {
+        path: "/students",
+        element: <ManageStudents />,
+      },
+      { path: "students/add-student", element: <Add_Update_Students /> },
+      { path: "students/edit-student", element: <Add_Update_Students /> },
       { path: "/courses", element: <ManageCourses /> },
-      { path: "/courses/add-course", element: <ManageCourses /> },
     ],
   },
 ]);
