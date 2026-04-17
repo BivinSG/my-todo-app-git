@@ -7,8 +7,8 @@ import useAppContext from "../hooks/useAppContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Add_Update_Students = () => {
-  const location = useLocation();
-  console.log(location);
+  const { state } = useLocation();
+  const { student } = state || {};
   const { dispatch } = useAppContext();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -73,6 +73,12 @@ const Add_Update_Students = () => {
   const goBack = () => {
     navigate("/students");
   };
+
+  useEffect(() => {
+    if (student) {
+      setFormValues({ ...student });
+    }
+  }, [student]);
 
   const handleSave = useCallback(() => {
     if (validateFormValues()) {
