@@ -4,9 +4,11 @@ import RadioButton from "../components/RadioButton";
 import CheckBox from "../components/CheckBox";
 import Dropdown from "../components/Dropdown";
 import useAppContext from "../hooks/useAppContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Add_Update_Students = () => {
+  const location = useLocation();
+  console.log(location);
   const { dispatch } = useAppContext();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({

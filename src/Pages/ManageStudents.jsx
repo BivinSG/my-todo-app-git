@@ -6,9 +6,11 @@ import RadioButton from "../components/RadioButton";
 import CheckBox from "../components/CheckBox";
 import Dropdown from "../components/Dropdown";
 import Table from "../components/Table";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const ManageStudents = function ListInput() {
+  const location = useLocation();
+  console.log(location);
   const navigate = useNavigate();
   const { state, dispatch } = useAppContext();
   const { students } = state;
@@ -21,7 +23,6 @@ const ManageStudents = function ListInput() {
   const [data, setData] = useState(students);
   const [tableData, setTableData] = useState([]);
 
- 
   const handleAddClick = () => {
     navigate("/students/add-student");
   };
@@ -41,10 +42,10 @@ const ManageStudents = function ListInput() {
   //   });
   //   setFormErrors({});
   // };
-  
+
   const handleEdit = (studentId) => {
-    navigate(`/students/edit-student`);
-    // const updateStudent = students.find((std) => std?.id === studentId);
+    const updatedStudent = students.find((std) => std.id === studentId);
+    navigate(`/students/edit-student`, { state: { student: updatedStudent } });
     // setFormValues(updateStudent);
   };
   const handleDelete = (studentId) => {
