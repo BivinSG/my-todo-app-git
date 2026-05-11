@@ -9,8 +9,6 @@ import Table from "../components/Table";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const ManageStudents = function ListInput() {
-  const location = useLocation();
-  console.log(location);
   const navigate = useNavigate();
   const { state, dispatch } = useAppContext();
   const { students } = state;
@@ -45,7 +43,7 @@ const ManageStudents = function ListInput() {
 
   const handleEdit = (studentId) => {
     const updatedStudent = students.find((std) => std.id === studentId);
-    navigate(`/students/edit-student`, { state: { student: updatedStudent } });
+    navigate(`/students/edit-student#student-details`, { state: { student: updatedStudent } });
     // setFormValues(updateStudent);
   };
   const handleDelete = (studentId) => {

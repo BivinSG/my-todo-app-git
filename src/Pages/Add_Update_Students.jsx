@@ -7,7 +7,8 @@ import useAppContext from "../hooks/useAppContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Add_Update_Students = () => {
-  const { state } = useLocation();
+  const { state, hash } = useLocation();
+  const sectionRef = useRef();
   const { student } = state || {};
   const { dispatch } = useAppContext();
   const navigate = useNavigate();
@@ -80,6 +81,13 @@ const Add_Update_Students = () => {
     }
   }, [student]);
 
+  useEffect(() => {
+    const element = sectionRef.current;
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [])
+
   const handleSave = useCallback(() => {
     if (validateFormValues()) {
       if (formValues?.id) {
@@ -99,7 +107,13 @@ const Add_Update_Students = () => {
 
   return (
     <main className="main">
-      <div style={{ padding: "50px" }}>
+      <div
+        style={{
+          padding: "50px",
+          minHeight: "200vh",
+          border: "2px solid blue",
+        }}
+      >
         <div
           style={{
             maxWidth: "75%",
@@ -174,6 +188,9 @@ const Add_Update_Students = () => {
           </button>
         </div>
       </div>
+      <section ref={sectionRef} id="student-details" style={{ minHeight: "200vh", border: "2px solid blue" }}>
+        Student Details
+      </section>
     </main>
   );
 };

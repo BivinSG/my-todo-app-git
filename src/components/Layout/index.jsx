@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <Sidebar  />
-      <Header />
+      {/* <Header /> */}
       <Outlet />
     </>
   );
