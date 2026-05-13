@@ -6,7 +6,7 @@ const initialState = {
   search: "",
   students: [
     {
-      id: 1,
+      id: "1",
       name: "Arun",
       contact: 9876543210,
       education: "tech",
@@ -14,7 +14,7 @@ const initialState = {
       course: "Mern",
     },
     {
-      id: 2,
+      id: "2",
       name: "Meera",
       contact: 9123456780,
       education: "tech",
@@ -22,7 +22,7 @@ const initialState = {
       course: "Mern",
     },
     {
-      id: 3,
+      id: "3",
       name: "Rahul",
       contact: 9988776655,
       education: "non-tech",
@@ -30,7 +30,7 @@ const initialState = {
       course: "React",
     },
     {
-      id: 4,
+      id: "4",
       name: "Anjali",
       contact: 9090909090,
       education: "non-tech",
@@ -38,7 +38,7 @@ const initialState = {
       course: "Python",
     },
     {
-      id: 5,
+      id: "5",
       name: "Vikram",
       contact: 9345678123,
       education: "tech",
@@ -46,7 +46,7 @@ const initialState = {
       course: "React",
     },
     {
-      id: 6,
+      id: "6",
       name: "Sneha",
       contact: 9765432101,
       education: "non-tech",
@@ -54,6 +54,7 @@ const initialState = {
       course: "Mern",
     },
   ],
+  findStudent: null,
 };
 
 function reducer(state, action) {
@@ -77,6 +78,13 @@ function reducer(state, action) {
         ...state,
         students: state?.students?.filter(
           (student) => student?.id !== action.payload,
+        ),
+      };
+    case "find-student":
+      return {
+        ...state,
+        findStudent: state?.students?.find(
+          (student) => student?.id === action.payload,
         ),
       };
     default:

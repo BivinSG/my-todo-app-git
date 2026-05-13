@@ -4,13 +4,19 @@ import RadioButton from "../components/RadioButton";
 import CheckBox from "../components/CheckBox";
 import Dropdown from "../components/Dropdown";
 import useAppContext from "../hooks/useAppContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 const Add_Update_Students = () => {
-  const { state, hash } = useLocation();
+  // const { studentId } = useParams();
+  const location = useLocation();
+  console.log(location);
+  const { state, dispatch } = useAppContext();
   const sectionRef = useRef();
-  const { student } = state || {};
-  const { dispatch } = useAppContext();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
@@ -20,6 +26,25 @@ const Add_Update_Students = () => {
     course: "",
   });
   const [formErrors, setFormErrors] = useState({});
+
+  const { findStudent } = state;
+  // const {studentId} =  useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const id = searchParams?.get("id");
+  const action = searchParams?.get("action");
+
+  useEffect(() => {
+    if (id && action === "edit") {
+      dispatch({ type: "find-student", payload: id });
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (id && action === "edit") {
+      setFormValues(findStudent);
+    }
+  }, [findStudent]);
 
   const nameRef = useRef();
   useEffect(() => {
@@ -75,19 +100,6 @@ const Add_Update_Students = () => {
     navigate("/students");
   };
 
-  useEffect(() => {
-    if (student) {
-      setFormValues({ ...student });
-    }
-  }, [student]);
-
-  useEffect(() => {
-    const element = sectionRef.current;
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [])
-
   const handleSave = useCallback(() => {
     if (validateFormValues()) {
       if (formValues?.id) {
@@ -110,8 +122,6 @@ const Add_Update_Students = () => {
       <div
         style={{
           padding: "50px",
-          minHeight: "200vh",
-          border: "2px solid blue",
         }}
       >
         <div
@@ -188,9 +198,6 @@ const Add_Update_Students = () => {
           </button>
         </div>
       </div>
-      <section ref={sectionRef} id="student-details" style={{ minHeight: "200vh", border: "2px solid blue" }}>
-        Student Details
-      </section>
     </main>
   );
 };

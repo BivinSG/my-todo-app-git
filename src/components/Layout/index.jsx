@@ -7,8 +7,8 @@ const Layout = () => {
   // const [menu, setMenu] = useState("home");
   return (
     <>
-      <Sidebar  />
-      {/* <Header /> */}
+      <Sidebar />
+      <Header />
       <Outlet />
     </>
   );

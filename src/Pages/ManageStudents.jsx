@@ -6,7 +6,13 @@ import RadioButton from "../components/RadioButton";
 import CheckBox from "../components/CheckBox";
 import Dropdown from "../components/Dropdown";
 import Table from "../components/Table";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 const ManageStudents = function ListInput() {
   const navigate = useNavigate();
@@ -20,32 +26,19 @@ const ManageStudents = function ListInput() {
   const [modalOpen, setModalOpen] = useState(false);
   const [data, setData] = useState(students);
   const [tableData, setTableData] = useState([]);
+  const { findStudent } = state;
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleAddClick = () => {
-    navigate("/students/add-student");
+    navigate(`/students/add-student?action=add`);
   };
-
-  // const handleSearch = useCallback((event) => {
-  //   dispatch({ type: "search", payload: event.target.value });
-  // }, []);
-
-  // const toggleModal = () => {
-  //   setModalOpen(!modalOpen);
-  //   setFormValues({
-  //     name: "",
-  //     contact: "",
-  //     education: "",
-  //     skills: [],
-  //     course: "",
-  //   });
-  //   setFormErrors({});
-  // };
 
   const handleEdit = (studentId) => {
-    const updatedStudent = students.find((std) => std.id === studentId);
-    navigate(`/students/edit-student#student-details`, { state: { student: updatedStudent } });
-    // setFormValues(updateStudent);
+    dispatch({ type: "find-student", payload: studentId });
+    navigate(`/students/edit-student?id=${studentId}&action=edit`);
   };
+
   const handleDelete = (studentId) => {
     dispatch({ type: "delete", payload: studentId });
   };
@@ -86,16 +79,11 @@ const ManageStudents = function ListInput() {
 
   useEffect(() => {
     if (Array.isArray(students)) {
-      const modifiedDataArray = students?.map(
-        (student, index) => ({
-          slNo: index + 1,
-          ...student,
-          skills: Array.isArray(student.skills)
-            ? student.skills.join(", ")
-            : "",
-        }),
-        [students],
-      );
+      const modifiedDataArray = students?.map((student, index) => ({
+        slNo: index + 1,
+        ...student,
+        skills: Array.isArray(student.skills) ? student.skills.join(", ") : "",
+      }));
 
       setTableData(modifiedDataArray);
     }
@@ -109,9 +97,6 @@ const ManageStudents = function ListInput() {
           setModalOpen={toggleModal}
           handleClose={handleClose}
           modalTitle={formValues?.id ? "Edit Student" : "Add Student"}
-          // modalBody={
-
-          // }
           handleSave={handleSave}
         />
       )}
