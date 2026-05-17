@@ -2,7 +2,7 @@ import { createContext, useReducer, useState } from "react";
 
 const AppContext = createContext();
 
-const initialState = {
+const initialStudentState = {
   search: "",
   students: [
     {
@@ -57,52 +57,94 @@ const initialState = {
   findStudent: null,
 };
 
-function reducer(state, action) {
+const initialCourseState = {
+  courses: [],
+};
+
+function studentReducer(studentState, action) {
   switch (action.type) {
     case "add":
       return {
-        ...state,
-        students: [...state.students, action.payload],
+        ...studentState,
+        students: [...studentState?.students, action.payload],
       };
 
     case "edit":
       return {
-        ...state,
-        students: state.students?.map((student) =>
+        ...studentState,
+        students: studentState?.students?.map((student) =>
           student?.id === action.payload?.id ? action.payload : student,
         ),
       };
 
     case "delete":
       return {
-        ...state,
-        students: state?.students?.filter(
+        ...studentState,
+        students: studentState?.students?.filter(
           (student) => student?.id !== action.payload,
         ),
       };
+    
     case "find-student":
       return {
-        ...state,
-        findStudent: state?.students?.find(
+        ...studentState,
+        findStudent: studentState?.students?.find(
           (student) => student?.id === action.payload,
         ),
       };
     default:
-      return state;
+      return studentState;
   }
 }
 
+const courseReducer = (courseState, action) => {
+  switch (action.type) {
+    case "add-course":
+      return {
+        ...courseState,
+        courses: [...courseState?.courses, action.payload],
+      };
+
+    case "edit-course":
+      const { payload } = action;
+      return {
+        ...courseState,
+        courses: courseState?.courses?.map((course) =>
+          course.id === payload?.id ? payload : course,
+        ),
+      };
+
+    case "delete-course":
+      return {
+        ...courseState,
+        courses: courseState?.courses?.filter(
+          (course) => course?.id !== action.payload,
+        ),
+      };
+
+    default:
+      return courseState;
+  }
+};
+
 export const AppProvider = ({ children }) => {
-  // console.log("app-provider is running");
+  const [studentState, dispatchStudent] = useReducer(
+    studentReducer,
+    initialStudentState,
+  );
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+  const [courseState, dispatchCourse] = useReducer(
+    courseReducer,
+    initialCourseState,
+  );
   const [searchValue, setSearchValue] = useState("");
   return (
     <AppContext.Provider
       value={{
-        state,
-        dispatch,
+        studentState,
+        dispatchStudent,
+        courseState,
+        dispatchCourse,
       }}
     >
       {children}

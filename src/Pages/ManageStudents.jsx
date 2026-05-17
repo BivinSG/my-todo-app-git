@@ -16,8 +16,13 @@ import {
 
 const ManageStudents = function ListInput() {
   const navigate = useNavigate();
-  const { state, dispatch } = useAppContext();
-  const { students } = state;
+  const {
+    studentState,
+    courseState,
+    dispatchStudent: dispatch,
+  } = useAppContext();
+  const { students } = studentState;
+  const { courses } = courseState;
   const [inputValue, setInputValue] = useState("");
   const [nameError, setNameError] = useState("");
   const [contactError, setContactError] = useState("");
@@ -26,7 +31,7 @@ const ManageStudents = function ListInput() {
   const [modalOpen, setModalOpen] = useState(false);
   const [data, setData] = useState(students);
   const [tableData, setTableData] = useState([]);
-  const { findStudent } = state;
+  // const { findStudent } = state;
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -83,11 +88,14 @@ const ManageStudents = function ListInput() {
         slNo: index + 1,
         ...student,
         skills: Array.isArray(student.skills) ? student.skills.join(", ") : "",
+        course: courses.find((c) => c.id === student.course)?.courseTitle,
       }));
 
       setTableData(modifiedDataArray);
     }
   }, [students]);
+
+  console.log(students);
 
   return (
     <main className="main">

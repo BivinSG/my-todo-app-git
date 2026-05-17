@@ -12,10 +12,16 @@ import {
 } from "react-router-dom";
 
 const Add_Update_Students = () => {
-  // const { studentId } = useParams();
   const location = useLocation();
   console.log(location);
-  const { state, dispatch } = useAppContext();
+  const {
+    studentState,
+    courseState,
+    dispatchStudent: dispatch,
+  } = useAppContext();
+  const { findStudent } = studentState;
+  const { courses } = courseState;
+
   const sectionRef = useRef();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -26,10 +32,8 @@ const Add_Update_Students = () => {
     course: "",
   });
   const [formErrors, setFormErrors] = useState({});
-
-  const { findStudent } = state;
-  // const {studentId} =  useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [courseOptions, setCourseOptions] = useState([]);
 
   const id = searchParams?.get("id");
   const action = searchParams?.get("action");
@@ -39,6 +43,14 @@ const Add_Update_Students = () => {
       dispatch({ type: "find-student", payload: id });
     }
   }, [id]);
+
+  useEffect(() => {
+    const options = courses?.map((course) => ({
+      label: course?.courseTitle,
+      value: course?.id,
+    }));
+    setCourseOptions(options);
+  }, [courses]);
 
   useEffect(() => {
     if (id && action === "edit") {
@@ -74,7 +86,7 @@ const Add_Update_Students = () => {
       if (checked) {
         setFormValues((prev) => ({
           ...prev,
-          [name]: [...prev[name], value],
+          [name]: [...(prev[name] || []), value],
         }));
       } else {
         setFormValues((prev) => ({
@@ -92,8 +104,16 @@ const Add_Update_Students = () => {
   }, []);
 
   const resetStates = () => {
-    setFormErrors({});
-    setFormValues({ name: "", contact: "" });
+    const resetStates = () => {
+      setFormErrors({});
+      setFormValues({
+        name: "",
+        contact: "",
+        education: "",
+        skills: [],
+        course: "",
+      });
+    };
   };
 
   const goBack = () => {
@@ -112,7 +132,6 @@ const Add_Update_Students = () => {
       goBack();
     }
   });
-
   const handleCancel = () => {
     goBack();
   };
@@ -182,11 +201,7 @@ const Add_Update_Students = () => {
               name={"course"}
               handleInputChange={handleInputChange}
               selectedValue={formValues?.course || ""}
-              options={[
-                { label: "Mern", value: "Mern" },
-                { label: "React", value: "React" },
-                { label: "Python", value: "Python" },
-              ]}
+              options={courseOptions} 
             />
           </div>
           <button className="btn btn-primary" onClick={handleSave}>
