@@ -4,6 +4,7 @@ import RadioButton from "../components/RadioButton";
 import CheckBox from "../components/CheckBox";
 import Dropdown from "../components/Dropdown";
 import useAppContext from "../hooks/useAppContext";
+import { useSelector, useDispatch } from "react-redux";
 import {
   useLocation,
   useNavigate,
@@ -14,11 +15,18 @@ import {
 const Add_Update_Students = () => {
   const location = useLocation();
   console.log(location);
-  const {
-    studentState,
-    courseState,
-    dispatchStudent: dispatch,
-  } = useAppContext();
+  // const {
+  //   studentState,
+  //   courseState,
+  //   dispatchStudent: dispatch,
+  // } = useAppContext();
+  // const { findStudent } = studentState;
+  // const { courses } = courseState;
+
+  const dispatch = useDispatch();
+  const studentState = useSelector((state) => state.studentState);
+  const courseState = useSelector((state) => state.courseState);
+
   const { findStudent } = studentState;
   const { courses } = courseState;
 
@@ -201,7 +209,7 @@ const Add_Update_Students = () => {
               name={"course"}
               handleInputChange={handleInputChange}
               selectedValue={formValues?.course || ""}
-              options={courseOptions} 
+              options={courseOptions}
             />
           </div>
           <button className="btn btn-primary" onClick={handleSave}>

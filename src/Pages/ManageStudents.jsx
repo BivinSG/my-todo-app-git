@@ -13,14 +13,21 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const ManageStudents = function ListInput() {
   const navigate = useNavigate();
-  const {
-    studentState,
-    courseState,
-    dispatchStudent: dispatch,
-  } = useAppContext();
+  // const {
+  //   studentState,
+  //   courseState,
+  //   dispatchStudent: dispatch,
+  // } = useAppContext();
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  console.log(state);
+  const studentState = useSelector((state) => state.studentState);
+  const courseState = useSelector((state) => state.courseState);
+
   const { students } = studentState;
   const { courses } = courseState;
   const [inputValue, setInputValue] = useState("");
