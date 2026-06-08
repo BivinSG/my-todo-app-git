@@ -23,10 +23,24 @@ const ManageStudents = function ListInput() {
   //   dispatchStudent: dispatch,
   // } = useAppContext();
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  console.log(state);
   const studentState = useSelector((state) => state.studentState);
   const courseState = useSelector((state) => state.courseState);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users",
+      );
+
+      const data = await response.json();
+      const studentsArray = data.map((student) => ({
+        id: student.id,
+        name: student.name,
+      }));
+      dispatch({ type: "get-students", payload: studentsArray });
+    };
+    getUserData();
+  }, []);
 
   const { students } = studentState;
   const { courses } = courseState;

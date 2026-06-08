@@ -55,6 +55,13 @@ const initialStudentState = {
 
 function studentReducer(studentState = initialStudentState, action) {
   switch (action.type) {
+    case "get-students": {
+      return {
+        ...studentState,
+        students: studentState.students,
+        ...action.payload,
+      };
+    }
     case "add":
       return {
         ...studentState,

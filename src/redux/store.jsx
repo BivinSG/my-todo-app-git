@@ -1,5 +1,6 @@
-import { createStore } from "redux";
-import appReducer from "./reducers/index";
+import { configureStore } from "@reduxjs/toolkit";
+import { thunk } from "redux-thunk";
+import appReducer from "./reducers";
 
-const store = createStore(appReducer);
+const store = configureStore({ reducer: appReducer });
 export default store;

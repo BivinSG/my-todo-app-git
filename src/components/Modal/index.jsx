@@ -8,6 +8,7 @@ const Modal = ({
   modalBody,
   handleSave,
   handleClose,
+  loading,
 }) => {
   // Hide modal when closed
   if (!modalOpen) return null;
@@ -22,7 +23,12 @@ const Modal = ({
         <div className={styles["modal-body"]}>{modalBody}</div>
 
         <div className={styles["modal-footer"]}>
-          <button className="btn btn-primary" onClick={handleSave}>
+          <button
+            disabled={loading}
+            type="button"
+            className={`btn btn-primary ${loading ? "opacity : 0.5" : ""}`}
+            onClick={handleSave}
+          >
             Save
           </button>
 

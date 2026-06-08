@@ -1,0 +1,31 @@
+{
+  "students": [],
+  "courses": [
+    {
+      "courseTitle": "wwpp1144",
+      "paidCourse": "yes",
+      "id": "fUe10R38sD0"
+    },
+    {
+      "courseTitle": "reactppp",
+      "paidCourse": "yes",
+      "id": "vT_sUZbVn2M"
+    },
+    {
+      "courseTitle": "javascript123",
+      "paidCourse": "no",
+      "id": "EvkU4_GvF34"
+    },
+    {
+      "courseTitle": "js",
+      "paidCourse": "no",
+      "id": "ifkAvOhMA0U"
+    },
+    {
+      "courseTitle": "reer",
+      "paidCourse": "no",
+      "id": "3sKaKWuMZ7s"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
