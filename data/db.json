@@ -7,24 +7,19 @@
       "id": "fUe10R38sD0"
     },
     {
-      "courseTitle": "reactppp",
-      "paidCourse": "yes",
-      "id": "vT_sUZbVn2M"
+      "courseTitle": "ne",
+      "paidCourse": "no",
+      "id": "cWSSFZLxUSU"
     },
     {
-      "courseTitle": "javascript123",
+      "courseTitle": "javasc",
       "paidCourse": "no",
-      "id": "EvkU4_GvF34"
+      "id": "kBdo7D64GWE"
     },
     {
-      "courseTitle": "js",
+      "courseTitle": "nig",
       "paidCourse": "no",
-      "id": "ifkAvOhMA0U"
-    },
-    {
-      "courseTitle": "reer",
-      "paidCourse": "no",
-      "id": "3sKaKWuMZ7s"
+      "id": "I7nDVPM9MY4"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -9,6 +9,8 @@ const Modal = ({
   handleSave,
   handleClose,
   loading,
+  SaveButtonText,
+  CloseButtonText,
 }) => {
   // Hide modal when closed
   if (!modalOpen) return null;
@@ -29,11 +31,11 @@ const Modal = ({
             className={`btn btn-primary ${loading ? "opacity : 0.5" : ""}`}
             onClick={handleSave}
           >
-            Save
+            {SaveButtonText}
           </button>
 
           <button className={styles["close-btn"]} onClick={handleClose}>
-            Close
+            {CloseButtonText}
           </button>
         </div>
       </div>

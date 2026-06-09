@@ -4,6 +4,7 @@ export const getCourseData = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: "GET_COURSE_DATA_REQUEST" });
+      await new Promise((resolve, reject) => setTimeout(resolve, 3000));
       const response = await axiosInstance.get("http://localhost:3000/courses");
       dispatch({
         type: "GET_COURSE_DATA_SUCCESS",
@@ -23,7 +24,7 @@ export const postCourseData = (courseData) => {
   return async (dispatch) => {
     try {
       dispatch({ type: "GET_COURSE_DATA_REQUEST" });
-
+      await new Promise((resolve, reject) => setTimeout(resolve, 5000));
       const response = await axiosInstance.post(
         "http://localhost:3000/courses",
         courseData,

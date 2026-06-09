@@ -10,6 +10,7 @@ import {
   postCourseData,
   updatedCourseData,
 } from "../redux/actions/coursesActions";
+import Loading from "../components/Loading";
 
 const ManageCourses = () => {
   const [courseDetails, setCourseDetails] = useState({
@@ -21,7 +22,12 @@ const ManageCourses = () => {
   const dispatch = useDispatch();
   const courseState = useSelector((state) => state.courseState);
   const { courses, loading, modalOpen, error } = courseState;
-  // console.log(error, "error");
+
+  useEffect(() => {
+    if (!modalOpen) {
+      setCourseDetails({ courseTitle: "", paidCourse: "" });
+    }
+  }, [modalOpen]);
 
   useEffect(() => {
     dispatch(getCourseData());
@@ -41,11 +47,6 @@ const ManageCourses = () => {
     dispatch(deleteCourseData(courseId));
   };
 
-  const resetStates = () => {
-    setCourseDetails({ courseTitle: "", paidCourse: "" });
-    // setModalOpen(false);
-  };
-
   const handleSubmit = () => {
     if (courseDetails?.courseTitle && courseDetails?.paidCourse) {
       if (courseDetails?.id) {
@@ -57,6 +58,10 @@ const ManageCourses = () => {
     }
   };
   // console.log(loading);
+
+  const handleClose = () => {
+    dispatch({ type: "CLOSE_MODAL" });
+  };
 
   useEffect(() => {
     if (Array.isArray(courses)) {
@@ -107,7 +112,7 @@ const ManageCourses = () => {
       <>
         {modalOpen && (
           <Modal
-            loading={postDataLoading}
+            loading={loading}
             modalOpen={modalOpen}
             // setModalOpen={setModalOpen}
             modalTitle={"Add Title"}
@@ -137,22 +142,31 @@ const ManageCourses = () => {
                 </div>
               </div>
             }
+            SaveButtonText={
+              loading ? (
+                <>
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>Saving...
+                </>
+              ) : (
+                "Save"
+              )
+            }
+            CloseButtonText={loading ? "Cancel" : "Close"}
             handleSave={handleSubmit}
-            handleClose={() => dispatch({ type: "CLOSE_MODAL" })}
+            handleClose={handleClose}
           />
         )}
       </>
-      {loading ? (
-        <p>Loading . . .</p>
-      ) : (
-        <>
-          <Table
-            tableColumns={tableColumns}
-            data={courseArray}
-            onAddClick={() => dispatch({ type: "OPEN_MODAL" })}
-          />
-        </>
-      )}
+      {loading && <Loading />}
+      <Table
+        tableColumns={tableColumns}
+        data={courseArray}
+        onAddClick={() => dispatch({ type: "OPEN_MODAL" })}
+      />
     </main>
   );
 };
